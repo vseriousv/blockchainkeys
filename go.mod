@@ -1,4 +1,4 @@
-module blockchain-keys
+module github.com/vseriousv/blockchain-keys
 
 go 1.20
 
