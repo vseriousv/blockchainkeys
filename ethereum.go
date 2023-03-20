@@ -1,4 +1,4 @@
-package blockchain_keys
+package blockchainkeys
 
 import (
 	"crypto/ecdsa"
@@ -7,36 +7,27 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
-type Ethereum struct {
-	PrivateKey string
-	PublicKey  string
-	Address    string
-}
-
-func (e *Ethereum) GenerateKeyPair() error {
+func (e *EthereumNetwork) GenerateKeyPair() (privateKey string, publicKey string, address string, err error) {
 	// Generation privateKey
-	privateKey, err := crypto.GenerateKey()
+	private, err := crypto.GenerateKey()
 	if err != nil {
 		fmt.Printf("Error generation privateKey: %v", err)
-		return err
+		return "", "", "", err
 	}
 
 	// Get publicKey from privateKey
-	publicKey := privateKey.Public()
+	public := private.Public()
 
 	// PublicKey to ECDSA format
-	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	publicKeyECDSA, ok := public.(*ecdsa.PublicKey)
 	if !ok {
 		fmt.Println("Error format publicKey to ECDSA")
-		return err
+		return "", "", "", err
 	}
 
-	// Get Address from PublicKey
-	address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
+	privateKey = hexutil.Encode(crypto.FromECDSA(private))
+	publicKey = hexutil.Encode(crypto.FromECDSAPub(publicKeyECDSA))
+	address = crypto.PubkeyToAddress(*publicKeyECDSA).Hex() // Get Address from PublicKey
 
-	e.PrivateKey = hexutil.Encode(crypto.FromECDSA(privateKey))
-	e.PublicKey = hexutil.Encode(crypto.FromECDSAPub(publicKeyECDSA))
-	e.Address = address
-
-	return nil
+	return privateKey, publicKey, address, nil
 }

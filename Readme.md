@@ -19,7 +19,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/vseriousv/blockchainkeys"
 )
 
@@ -32,6 +31,9 @@ func main() {
 
 	privateKey, publicKey, address, err := bc.GenerateKeyPair()
 	if err != nil {
+		return
+	}
+	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
@@ -40,6 +42,7 @@ func main() {
 	fmt.Println("Public Key:", publicKey)
 	fmt.Println("Address:", address)
 }
+
 ```
 
 You can replace "Ethereum" with "Tron" or "Waves" to generate keys and addresses for those blockchains.

@@ -1,19 +1,31 @@
-package blockchain_keys
+package blockchainkeys
 
 import "fmt"
 
+type BlockchainType string
+
+const (
+	Ethereum BlockchainType = "Ethereum"
+	Tron     BlockchainType = "Tron"
+	Waves    BlockchainType = "Waves"
+)
+
 type Blockchain interface {
-	GenerateKeyPair() (err error)
+	GenerateKeyPair() (privateKey string, publicKey string, address string, err error)
 }
 
-func NewBlockchain(name string) (Blockchain, error) {
+type EthereumNetwork struct{}
+type TronNetwork struct{}
+type WavesNetwork struct{}
+
+func NewBlockchain(name BlockchainType) (Blockchain, error) {
 	switch name {
-	case "Ethereum":
-		return &Ethereum{}, nil
-	case "Tron":
-		return &Tron{}, nil
-	case "Waves":
-		return &Waves{}, nil
+	case Ethereum:
+		return &EthereumNetwork{}, nil
+	case Tron:
+		return &TronNetwork{}, nil
+	case Waves:
+		return &WavesNetwork{}, nil
 	default:
 		return nil, fmt.Errorf("unknown blockchain: %s", name)
 	}

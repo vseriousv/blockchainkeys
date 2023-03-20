@@ -1,30 +1,24 @@
-package blockchain_keys
+package blockchainkeys
 
 import (
 	"github.com/wavesplatform/gowaves/pkg/crypto"
 	"github.com/wavesplatform/gowaves/pkg/proto"
 )
 
-type Waves struct {
-	PrivateKey string
-	PublicKey  string
-	Address    string
-}
-
 // GenerateKeyPair - for waves MainNetScheme
-func (w *Waves) GenerateKeyPair() error {
-	privateKey, publicKey, err := crypto.GenerateKeyPair(nil)
+func (w *WavesNetwork) GenerateKeyPair() (privateKey string, publicKey string, address string, err error) {
+	private, public, err := crypto.GenerateKeyPair(nil)
 	if err != nil {
-		return err
+		return "", "", "", err
 	}
 
-	address, err := proto.NewAddressFromPublicKey(proto.MainNetScheme, publicKey)
+	addrs, err := proto.NewAddressFromPublicKey(proto.MainNetScheme, public)
 	if err != nil {
-		return err
+		return "", "", "", err
 	}
 
-	w.PrivateKey = privateKey.String()
-	w.PublicKey = publicKey.String()
-	w.Address = address.String()
-	return nil
+	privateKey = private.String()
+	publicKey = public.String()
+	address = addrs.String()
+	return privateKey, publicKey, address, nil
 }
