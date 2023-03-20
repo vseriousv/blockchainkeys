@@ -1,4 +1,4 @@
-module github.com/vseriousv/blockchain-keys
+module github.com/vseriousv/blockchainkeys
 
 go 1.20
 
