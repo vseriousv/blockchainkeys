@@ -1,13 +1,18 @@
 package blockchainkeys
 
 import (
+	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/wavesplatform/gowaves/pkg/crypto"
 	"github.com/wavesplatform/gowaves/pkg/proto"
 )
 
 // GenerateKeyPair - for waves MainNetScheme
 func (w *WavesNetwork) GenerateKeyPair() (privateKey string, publicKey string, address string, err error) {
-	private, public, err := crypto.GenerateKeyPair(nil)
+	seed, err := hdkeychain.GenerateSeed(hdkeychain.MinSeedBytes)
+	if err != nil {
+		return "", "", "", err
+	}
+	private, public, err := crypto.GenerateKeyPair(seed)
 	if err != nil {
 		return "", "", "", err
 	}
