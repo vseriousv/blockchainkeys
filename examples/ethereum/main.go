@@ -14,9 +14,6 @@ func main() {
 
 	privateKey, publicKey, address, err := bc.GenerateKeyPair()
 	if err != nil {
-		return
-	}
-	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
