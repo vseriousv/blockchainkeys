@@ -33,6 +33,10 @@ func (e *EthereumNetwork) GenerateKeyPair() (privateKey string, publicKey string
 }
 
 func (e *EthereumNetwork) GetPublicKeyAndAddressByPrivateKey(privateKey string) (publicKey string, address string, err error) {
+	if privateKey[:2] == "0x" {
+		privateKey = privateKey[2:]
+	}
+
 	pk, err := crypto.HexToECDSA(privateKey)
 	if err != nil {
 		return "", "", err
@@ -45,7 +49,7 @@ func (e *EthereumNetwork) GetPublicKeyAndAddressByPrivateKey(privateKey string) 
 	}
 
 	publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
-	publicKeyHex := hexutil.Encode(publicKeyBytes)[4:]
+	publicKeyHex := hexutil.Encode(publicKeyBytes)
 
 	address = crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
 
