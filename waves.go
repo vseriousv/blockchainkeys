@@ -27,3 +27,18 @@ func (w *WavesNetwork) GenerateKeyPair() (privateKey string, publicKey string, a
 	address = addrs.String()
 	return privateKey, publicKey, address, nil
 }
+
+func (w *WavesNetwork) GetPublicKeyAndAddressByPrivateKey(privateKey string) (publicKey string, address string, err error) {
+	secretKey := crypto.MustSecretKeyFromBase58(privateKey)
+
+	publicKeyBytes := crypto.GeneratePublicKey(secretKey)
+
+	addrs, err := proto.NewAddressFromPublicKey(proto.MainNetScheme, publicKeyBytes)
+	if err != nil {
+		return "", "", err
+	}
+
+	publicKey = publicKeyBytes.String()
+	address = addrs.String()
+	return publicKey, address, nil
+}

@@ -31,3 +31,23 @@ func (e *EthereumNetwork) GenerateKeyPair() (privateKey string, publicKey string
 
 	return privateKey, publicKey, address, nil
 }
+
+func (e *EthereumNetwork) GetPublicKeyAndAddressByPrivateKey(privateKey string) (publicKey string, address string, err error) {
+	pk, err := crypto.HexToECDSA(privateKey)
+	if err != nil {
+		return "", "", err
+	}
+
+	pb := pk.Public()
+	publicKeyECDSA, ok := pb.(*ecdsa.PublicKey)
+	if !ok {
+		return "", "", fmt.Errorf("error casting public key to ECDSA")
+	}
+
+	publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
+	publicKeyHex := hexutil.Encode(publicKeyBytes)[4:]
+
+	address = crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
+
+	return publicKeyHex, address, nil
+}

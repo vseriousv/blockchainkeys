@@ -12,6 +12,7 @@ const (
 
 type Blockchain interface {
 	GenerateKeyPair() (privateKey string, publicKey string, address string, err error)
+	GetPublicKeyAndAddressByPrivateKey(privateKey string) (publicKey string, address string, err error)
 }
 
 type EthereumNetwork struct{}
